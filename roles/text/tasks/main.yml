@@ -1,0 +1,7 @@
+- name: copy
+  copy:
+  content: "Hello World, I'm Ansible."
+    dest: ~/helloworld.txt
+    force: yes
+  become: true
+  become_method: sudo
