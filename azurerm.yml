@@ -1,0 +1,25 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Create Azure Deploy
+      azure_rm_deployment:
+        state: present
+        resource_group_name: AnsibleResourceGroup
+        parameters:
+          adminUsername:
+            value: ansibleadmin
+          sshKeyData:
+            value: "Your SSH Key Data"
+        template_link: 'https://raw.githubusercontent.com/Claudh9/azure-templates/master/ubuntu.json'
+      register: azure
+
+    - name: add lines to hosts
+      lineinfile: 
+        dest=/etc/ansible/hosts
+        line="{{ item['ips'][0].public_ip }} ansible_user=ansibleadmin"
+        state=present
+        insertafter=EOF
+        create=True
+        owner=YourAnsibleAdminUser
+      with_items: "{{ azure.deployment.instances }}"
