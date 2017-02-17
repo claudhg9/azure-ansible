@@ -1,0 +1,7 @@
+- hosts: all
+  tasks: 
+  - name: copy
+    copy:
+      content: "Hello TechReady attendees, I'm Ansible."
+      dest: ~/helloworld.txt
+      force: yes
